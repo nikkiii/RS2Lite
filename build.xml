@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project name="RS2Lite" default="build" basedir=".">
+	<property name="root" location="." />
+	<property name="src" location="src" />
+	<property name="bin" location="bin" />
+	<property name="doc" location="doc" />
+
+	<path id="binaries">
+		<pathelement path="${bin}" />
+	</path>
+
+	<path id="master">
+		<path refid="binaries" />
+	</path>
+
+	<fileset id="sources" dir="${src}">
+		<include name="**/*.java" />
+	</fileset>
+
+	<target name="init">
+		<mkdir dir="${bin}" />
+		<mkdir dir="${doc}" />
+	</target>
+
+	<target name="build" depends="init">
+		<javac srcdir="${src}" destdir="${bin}" includeantruntime="false" />
+		<tstamp/>
+	</target>
+
+	<target name="clean">
+		<delete dir="${bin}" />
+		<delete dir="${doc}" />
+	</target>
+
+	<target name="rebuild" depends="clean, build" />
+
+	<target name="doc" depends="build">
+		<javadoc sourcepath="${src}" classpathref="libraries" access="private" destdir="${doc}" windowtitle="JScreenSnapper">
+			<doctitle>
+				<![CDATA[<h1>RS2Lite</h1>]]>
+			</doctitle>
+		</javadoc>
+	</target>
+
+	<target name="dist" description="generate the distribution">		
+		<!-- Put everything in ${bin} into the RS2Lite.jar file -->
+		<jar jarfile="RS2Lite.jar">
+			<fileset dir="${bin}" />
+			<manifest>
+				<attribute name="Main-Class" value="com.rs2lite.RS2Lite"/>
+			</manifest>
+		</jar>
+	</target>
+</project>
